@@ -41,8 +41,9 @@ const AdminProducts = () => {
     setSaving(true);
     setError('');
     try {
-      const url = editing ? `${API_BASE}/api/products/${editing}` : `${API_BASE}/api/products`;
-      const method = editing ? 'PUT' : 'POST';
+      const isNew = editing === 'new';
+      const url = isNew ? `${API_BASE}/api/products` : `${API_BASE}/api/products/${editing}`;
+      const method = isNew ? 'POST' : 'PUT';
       const res = await fetch(url, { method, headers, body: JSON.stringify(form) });
       if (!res.ok) { const d = await res.json(); throw new Error(d.message); }
       setEditing(null);

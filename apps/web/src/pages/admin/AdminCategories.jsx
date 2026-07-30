@@ -27,8 +27,9 @@ const AdminCategories = () => {
   const handleSave = async () => {
     setSaving(true); setError('');
     try {
-      const url = editing ? `${API_BASE}/api/categories/${editing}` : `${API_BASE}/api/categories`;
-      const method = editing ? 'PUT' : 'POST';
+      const isNew = editing === 'new';
+      const url = isNew ? `${API_BASE}/api/categories` : `${API_BASE}/api/categories/${editing}`;
+      const method = isNew ? 'POST' : 'PUT';
       const res = await fetch(url, { method, headers, body: JSON.stringify(form) });
       if (!res.ok) { const d = await res.json(); throw new Error(d.message); }
       setEditing(null); setForm({ title: '', image: '', description: '', order: 0 }); fetchData();
