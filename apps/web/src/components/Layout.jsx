@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Search, ShoppingBag, User, Menu, X, Flame, Mail, Lock, UserPlus, Eye, EyeOff, LogOut, Package, UserCircle, LayoutDashboard, LogIn } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useAuth, OPEN_AUTH_EVENT } from '@/context/AuthContext';
+import { getSeoSettings } from '@/lib/seo';
 import ShoppingCart from '@/components/ShoppingCart';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -544,6 +546,7 @@ const Layout = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
+  const [seo, setSeo] = useState(getSeoSettings());
 
   useEffect(() => {
     const handleOpenAuth = (e) => {
@@ -551,7 +554,16 @@ const Layout = ({ children }) => {
       setIsAuthOpen(true);
     };
     window.addEventListener(OPEN_AUTH_EVENT, handleOpenAuth);
-    return () => window.removeEventListener(OPEN_AUTH_EVENT, handleOpenAuth);
+
+    const handleStorageChange = () => setSeo(getSeoSettings());
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('seo-updated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener(OPEN_AUTH_EVENT, handleOpenAuth);
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('seo-updated', handleStorageChange);
+    };
   }, []);
 
   const handleAuthOpen = (mode = 'login') => {
@@ -561,6 +573,20 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#050507]">
+      <Helmet>
+        <title>{seo.title}</title>
+        <meta name="description" content={seo.description} />
+        <meta name="keywords" content={seo.keywords} />
+        <meta property="og:title" content={seo.title} />
+        <meta property="og:description" content={seo.description} />
+        <meta property="og:image" content={seo.ogImage} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seo.title} />
+        <meta name="twitter:description" content={seo.description} />
+        <meta name="twitter:image" content={seo.ogImage} />
+        <link rel="icon" href={seo.favicon} />
+      </Helmet>
       <Header
         onCartClick={() => setIsCartOpen(true)}
         onAuthOpen={handleAuthOpen}

@@ -22,6 +22,7 @@ import AdminCategories from './pages/admin/AdminCategories';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminLeads from './pages/admin/AdminLeads';
+import AdminSeo from './pages/admin/AdminSeo';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
               <Route path="orders" element={<AdminOrders />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="leads" element={<AdminLeads />} />
+              <Route path="seo" element={<AdminSeo />} />
             </Route>
           </Routes>
           <Toaster />

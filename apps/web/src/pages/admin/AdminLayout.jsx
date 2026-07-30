@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Tags, ShoppingCart, Users, MessageSquare, LogOut, Menu, X, ChevronLeft } from 'lucide-react';
+import { LayoutDashboard, Package, Tags, ShoppingCart, Users, MessageSquare, Globe, LogOut, Menu, X, ChevronLeft } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 const sidebarLinks = [
@@ -10,6 +10,7 @@ const sidebarLinks = [
   { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
   { to: '/admin/users', icon: Users, label: 'Users' },
   { to: '/admin/leads', icon: MessageSquare, label: 'Leads' },
+  { to: '/admin/seo', icon: Globe, label: 'SEO' },
 ];
 
 const AdminLayout = () => {
