@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Search, ShoppingBag, User, Menu, X, Flame, Mail, Lock, UserPlus, Eye, EyeOff, LogOut, Package, UserCircle, LayoutDashboard, LogIn } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth, OPEN_AUTH_EVENT } from '@/context/AuthContext';
 import ShoppingCart from '@/components/ShoppingCart';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -544,6 +544,15 @@ const Layout = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
+
+  useEffect(() => {
+    const handleOpenAuth = (e) => {
+      setAuthMode(e.detail?.mode || 'login');
+      setIsAuthOpen(true);
+    };
+    window.addEventListener(OPEN_AUTH_EVENT, handleOpenAuth);
+    return () => window.removeEventListener(OPEN_AUTH_EVENT, handleOpenAuth);
+  }, []);
 
   const handleAuthOpen = (mode = 'login') => {
     setAuthMode(mode);

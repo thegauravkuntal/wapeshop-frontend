@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ShoppingCart, Eye } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth, OPEN_AUTH_EVENT } from '@/context/AuthContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -12,6 +13,7 @@ const placeholderImage = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWln
 const ProductCard = ({ product, index }) => {
   const { addToCart, removeFromCart, cartItems } = useCart();
   const { toast } = useToast();
+  const { isAuthenticated } = useAuth();
   const [adding, setAdding] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
 
@@ -28,6 +30,11 @@ const ProductCard = ({ product, index }) => {
     e.stopPropagation();
     if (!variant) {
       toast({ title: "No variant available", variant: "destructive" });
+      return;
+    }
+
+    if (!isAuthenticated) {
+      window.dispatchEvent(new CustomEvent(OPEN_AUTH_EVENT, { detail: { mode: 'login' } }));
       return;
     }
 

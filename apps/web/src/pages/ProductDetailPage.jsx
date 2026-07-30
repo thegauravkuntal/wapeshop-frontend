@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle, Minus, Plus, XCircle, ShoppingCart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth, OPEN_AUTH_EVENT } from '@/context/AuthContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const placeholderImage = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzc0MTUxIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzlDQTNBRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4K";
@@ -12,6 +13,7 @@ function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { isAuthenticated } = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -38,6 +40,11 @@ function ProductDetailPage() {
 
   const handleCheckout = () => {
     if (!product || !selectedVariant) return;
+
+    if (!isAuthenticated) {
+      window.dispatchEvent(new CustomEvent(OPEN_AUTH_EVENT, { detail: { mode: 'login' } }));
+      return;
+    }
 
     if (selectedVariant.inventory !== undefined && selectedVariant.inventory <= 0) {
       toast({ title: 'Out of stock', description: 'Yeh product abhi available nahi hai.', variant: 'destructive' });

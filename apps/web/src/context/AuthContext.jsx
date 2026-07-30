@@ -9,6 +9,8 @@ import {
   getStoredToken,
 } from '@/api/authApi';
 
+export const OPEN_AUTH_EVENT = 'open-auth-modal';
+
 const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
