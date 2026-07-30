@@ -133,14 +133,15 @@ const ProductCard = ({ product, index }) => {
   );
 };
 
-const ProductsList = () => {
+const ProductsList = ({ categoryId }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/products`);
+        const params = categoryId ? `?category=${encodeURIComponent(categoryId)}` : '';
+        const res = await fetch(`${API_BASE}/api/products${params}`);
         if (res.ok) {
           const data = await res.json();
           setProducts(data.products || []);
@@ -152,7 +153,7 @@ const ProductsList = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [categoryId]);
 
   if (loading) {
     return (

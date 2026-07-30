@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Truck, ShieldCheck, Star, Zap, RotateCcw, Heart, Award, Quote, Sparkles, Tag } from 'lucide-react';
 import ProductsList from '@/components/ProductsList';
+
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 const HeroImg = ({ src, alt, className }) => {
   const [loaded, setLoaded] = useState(false);
@@ -43,23 +45,18 @@ const CatImg = ({ src, alt, className }) => {
   );
 };
 
-const categories = [
-  { name: 'ELFBAR VAPES', tag: 'Popular disposable vapes', img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', glow: 'shadow-[0_0_45px_-8px_rgba(56,189,248,0.6)]' },
-  { name: 'ELFBAR RAYA', tag: 'Premium Raya series', img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', glow: 'shadow-[0_0_45px_-8px_rgba(236,72,153,0.6)]' },
-  { name: 'ALFAKHER CROWN BAR', tag: 'Crown bar collection', img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', glow: 'shadow-[0_0_45px_-8px_rgba(168,85,247,0.6)]' },
-  { name: 'ELFBAR MOONLIGHT', tag: 'Moonlight edition', img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', glow: 'shadow-[0_0_45px_-8px_rgba(34,197,94,0.6)]' },
-  { name: 'GEEK VAPES', tag: 'Geek vape devices', img: 'https://images.hostinger.com/019cf443-90fa-4626-94fa-78805cafdf52.png', glow: 'shadow-[0_0_45px_-8px_rgba(56,189,248,0.6)]' },
-  { name: 'DTY HERB & CHARGER', tag: 'Herb & pocket chargers', img: 'https://images.hostinger.com/548e8e8b-a0ba-4c1b-8755-b64130e4d70e.png', glow: 'shadow-[0_0_45px_-8px_rgba(34,197,94,0.6)]' },
-  { name: 'I GET VAPES', tag: 'I Get range', img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', glow: 'shadow-[0_0_45px_-8px_rgba(236,72,153,0.6)]' },
-  { name: 'YUOTO VAPES', tag: 'Yuoto collection', img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', glow: 'shadow-[0_0_45px_-8px_rgba(168,85,247,0.6)]' },
-  { name: 'TEREA & HEETS', tag: 'Heated tobacco sticks', img: 'https://images.hostinger.com/96db0cdd-77a1-4403-ac60-0cf1cff497ad.png', glow: 'shadow-[0_0_45px_-8px_rgba(251,191,36,0.6)]' },
-  { name: 'PEN VAPES', tag: 'Sleek pen-style vapes', img: 'https://images.hostinger.com/5eab9da6-8d68-46ca-b65c-9724b3c26193.png', glow: 'shadow-[0_0_45px_-8px_rgba(56,189,248,0.6)]' },
-  { name: 'RECHARGEABLE VAPES', tag: 'USB rechargeable devices', img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', glow: 'shadow-[0_0_45px_-8px_rgba(34,197,94,0.6)]' },
-  { name: 'DISPOSABLE VAPES', tag: 'Ready to use, no hassle', img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', glow: 'shadow-[0_0_45px_-8px_rgba(236,72,153,0.6)]' },
-  { name: 'MORE ITEMS', tag: 'Browse all products', img: 'https://images.hostinger.com/14c3995f-cde9-49e0-b1a0-fc7e5d366db8.png', glow: 'shadow-[0_0_45px_-8px_rgba(168,85,247,0.6)]' },
-];
+const catPlaceholder = 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png';
 
 const HomePage = () => {
+  const [dbCategories, setDbCategories] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/categories`)
+      .then(res => res.ok ? res.json() : [])
+      .then(setDbCategories)
+      .catch(() => {});
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -131,15 +128,18 @@ const HomePage = () => {
           <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5">
-          {categories.map((c, i) => (
-            <motion.div key={c.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.05 }}>
-              <Link to="/store" className={`group block rounded-2xl overflow-hidden glass-card transition-all duration-300 hover:-translate-y-1.5 hover:${c.glow}`}>
+          {(dbCategories.length > 0 ? dbCategories : (() => { const d = []; for (let i = 0; i < 5; i++) d.push({ _id: 'skeleton', title: '', image: '' }); return d; })()).map((c, i) => (
+            <motion.div key={c._id || i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.05 }}>
+              <Link
+                to={c._id && c._id !== 'skeleton' ? `/store?category=${c._id}` : '/store'}
+                className="group block rounded-2xl overflow-hidden glass-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_0_45px_-8px_rgba(56,189,248,0.6)]"
+              >
                 <div className="relative aspect-square overflow-hidden">
-                  <CatImg src={c.img} alt={c.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <CatImg src={c.image || catPlaceholder} alt={c.title || c.name || ''} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="font-display font-bold text-sm sm:text-base leading-tight">{c.name}</h3>
-                    <p className="text-[11px] text-gray-300 mt-0.5">{c.tag}</p>
+                    <h3 className="font-display font-bold text-sm sm:text-base leading-tight">{c.title || '...'}</h3>
+                    <p className="text-[11px] text-gray-300 mt-0.5">{(c.title || '').substring(0, 24)}</p>
                   </div>
                 </div>
               </Link>
