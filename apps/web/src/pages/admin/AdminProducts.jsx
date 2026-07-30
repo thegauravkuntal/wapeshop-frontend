@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X, Save, Loader2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save, Loader2, Upload, ChevronDown, ChevronRight } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -9,6 +10,7 @@ const emptyProduct = {
 };
 
 const AdminProducts = () => {
+  const { toast } = useToast();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,6 +18,9 @@ const AdminProducts = () => {
   const [form, setForm] = useState(emptyProduct);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkJson, setBulkJson] = useState('');
+  const [bulkLoading, setBulkLoading] = useState(false);
 
   const token = localStorage.getItem('vape-shop-token');
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
@@ -81,19 +86,100 @@ const AdminProducts = () => {
   const removeVariant = (i) => setForm(prev => ({ ...prev, variants: prev.variants.filter((_, idx) => idx !== i) }));
   const updateVariant = (i, key, val) => setForm(prev => ({ ...prev, variants: prev.variants.map((v, idx) => idx === i ? { ...v, [key]: val } : v) }));
 
+  const handleBulkImport = async () => {
+    let data;
+    try {
+      data = JSON.parse(bulkJson);
+    } catch {
+      toast({ title: 'Invalid JSON', description: 'JSON format sahi karo.', variant: 'destructive' });
+      return;
+    }
+    const productsArr = Array.isArray(data) ? data : data.products;
+    if (!Array.isArray(productsArr) || productsArr.length === 0) {
+      toast({ title: 'No products found', description: 'JSON me products array hona chahiye.', variant: 'destructive' });
+      return;
+    }
+    setBulkLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/products/bulk`, {
+        method: 'POST', headers, body: JSON.stringify({ products: productsArr }),
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.message); }
+      const result = await res.json();
+      toast({ title: `✅ ${result.count} products imported!` });
+      setBulkJson('');
+      setBulkOpen(false);
+      fetchData();
+    } catch (err) {
+      toast({ title: 'Import failed', description: err.message, variant: 'destructive' });
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
   if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" /></div>;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-display font-extrabold text-white">Products ({products.length})</h1>
-        {!editing && (
-          <button onClick={() => { setForm(emptyProduct); setEditing('new'); }}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-600 transition-colors">
-            <Plus size={16} /> Add Product
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {!editing && (
+            <>
+              <button onClick={() => setBulkOpen(!bulkOpen)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 text-sm font-semibold hover:text-white hover:bg-white/10 transition-colors">
+                <Upload size={14} /> Bulk Import
+              </button>
+              <button onClick={() => { setForm(emptyProduct); setEditing('new'); }}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-600 transition-colors">
+                <Plus size={16} /> Add Product
+              </button>
+            </>
+          )}
+        </div>
       </div>
+
+      {bulkOpen && (
+        <div className="bg-white/[0.03] border border-white/10 rounded-xl p-5 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Upload size={16} className="text-emerald-400" /> Bulk Import Products
+            </h2>
+            <button onClick={() => setBulkOpen(false)} className="text-gray-400 hover:text-white"><X size={18} /></button>
+          </div>
+          <p className="text-sm text-gray-400 mb-3">
+            JSON array of products paste karo. Har object me <code className="text-emerald-400">title</code>, <code className="text-emerald-400">category</code> (Category ID), <code className="text-emerald-400">variants</code> array hona chahiye.
+          </p>
+          <textarea
+            value={bulkJson}
+            onChange={e => setBulkJson(e.target.value)}
+            placeholder='[
+  {
+    "title": "Product Name",
+    "subtitle": "Short tagline",
+    "description": "Full description...",
+    "image": "https://...",
+    "category": "CATEGORY_ID_HERE",
+    "ribbonText": "Bestseller",
+    "variants": [
+      { "title": "Default", "price": 999, "salePrice": 799, "inventory": 50 }
+    ]
+  }
+]'
+            rows={10}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-gray-600 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-400/50 resize-none"
+          />
+          <div className="flex gap-3 mt-4">
+            <button onClick={handleBulkImport} disabled={bulkLoading || !bulkJson.trim()}
+              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-600 disabled:opacity-50 transition-colors">
+              {bulkLoading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+              {bulkLoading ? 'Importing...' : `Import All (${(() => { try { const d = JSON.parse(bulkJson); return (Array.isArray(d) ? d : d.products)?.length || 0; } catch { return 0; } })()})`}
+            </button>
+            <button onClick={() => setBulkOpen(false)}
+              className="px-5 py-2 rounded-lg bg-white/5 text-gray-400 text-sm hover:bg-white/10 transition-colors">Cancel</button>
+          </div>
+        </div>
+      )}
 
       {error && <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">{error}</div>}
 
