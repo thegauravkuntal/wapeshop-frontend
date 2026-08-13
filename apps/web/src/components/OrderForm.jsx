@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/hooks/useCart';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, ArrowLeft, MapPin, User, Phone, CreditCard } from 'lucide-react';
+import { openWhatsAppOrder } from '@/lib/utils';
+import { Loader2, ArrowLeft, MapPin, User, Phone } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -21,7 +22,6 @@ const OrderForm = ({ onClose }) => {
     city: user?.address?.city || '',
     state: user?.address?.state || '',
     pincode: user?.address?.pincode || '',
-    paymentMethod: 'cod',
   });
 
   const handleChange = (e) => {
@@ -84,7 +84,6 @@ const OrderForm = ({ onClose }) => {
             pincode: form.pincode,
           },
           totalAmount,
-          paymentMethod: form.paymentMethod,
         }),
       });
 
@@ -94,6 +93,21 @@ const OrderForm = ({ onClose }) => {
       }
 
       clearCart();
+      openWhatsAppOrder('919983457020', {
+        name: form.name,
+        phone: form.phone,
+        address: `${form.street}, ${form.city}, ${form.state} - ${form.pincode}`,
+        items: cartItems.map(item => ({
+          title: `${item.product.title} - ${item.variant.title}`,
+          quantity: item.quantity,
+          price: item.variant.sale_price_in_cents
+            ? item.variant.sale_price_in_cents / 100
+            : item.variant.price_in_cents
+            ? item.variant.price_in_cents / 100
+            : 0,
+        })),
+        total: totalAmount,
+      });
       toast({ title: 'Order Placed!', description: 'Aapka order successfully place ho gaya.' });
       navigate('/success');
       if (onClose) onClose();
@@ -151,16 +165,6 @@ const OrderForm = ({ onClose }) => {
             <label className="block text-sm text-gray-400 mb-1.5">Pincode</label>
             <input type="text" name="pincode" value={form.pincode} onChange={handleChange} required
               className="w-full h-11 px-4 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-400 mb-1.5 flex items-center gap-1.5"><CreditCard size={12} /> Payment Method</label>
-            <select name="paymentMethod" value={form.paymentMethod} onChange={handleChange}
-              className="w-full h-11 px-4 rounded-lg bg-white border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50">
-              <option value="cod" className="text-gray-900 bg-white">Cash on Delivery</option>
-              <option value="upi" className="text-gray-900 bg-white">UPI</option>
-              <option value="card" className="text-gray-900 bg-white">Card</option>
-            </select>
           </div>
 
           <div className="bg-white/5 rounded-xl p-4 mt-4">

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2, MapPin, User, Phone, CreditCard, Package, Trash2 } from 'lucide-react';
+import { ArrowLeft, Loader2, MapPin, User, Phone, Package, Trash2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { openWhatsAppOrder } from '@/lib/utils';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -21,7 +22,6 @@ const CheckoutPage = () => {
     city: '',
     state: '',
     pincode: '',
-    paymentMethod: 'cod',
   });
 
   useEffect(() => {
@@ -119,7 +119,6 @@ const CheckoutPage = () => {
             pincode: form.pincode,
           },
           totalAmount,
-          paymentMethod: form.paymentMethod,
         }),
       });
 
@@ -130,6 +129,17 @@ const CheckoutPage = () => {
 
       localStorage.removeItem('checkout-items');
       localStorage.removeItem('checkout-item');
+      openWhatsAppOrder('919983457020', {
+        name: form.name,
+        phone: form.phone,
+        address: `${form.street}, ${form.city}, ${form.state} - ${form.pincode}`,
+        items: items.map(item => ({
+          title: `${item.productTitle} - ${item.variantTitle}`,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        total: totalAmount,
+      });
       toast({ title: 'Order Placed!', description: 'Aapka order successfully place ho gaya.' });
       navigate('/success');
     } catch (err) {
@@ -203,16 +213,6 @@ const CheckoutPage = () => {
               <label className="block text-sm text-gray-400 mb-1.5">Pincode</label>
               <input type="text" name="pincode" value={form.pincode} onChange={handleChange} required
                 className="w-full h-11 px-4 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-400 mb-1.5 flex items-center gap-1.5"><CreditCard size={12} /> Payment Method</label>
-              <select name="paymentMethod" value={form.paymentMethod} onChange={handleChange}
-                className="w-full h-11 px-4 rounded-lg bg-white border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50">
-                <option value="cod" className="text-gray-900 bg-white">Cash on Delivery</option>
-                <option value="upi" className="text-gray-900 bg-white">UPI</option>
-                <option value="card" className="text-gray-900 bg-white">Card</option>
-              </select>
             </div>
 
             <button type="submit" disabled={loading}
