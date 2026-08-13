@@ -112,6 +112,7 @@ function ProductDetailPage() {
                 src={product.image || product.images?.[0]?.url || placeholderImage}
                 alt={product.title}
                 fetchPriority="high"
+                onError={(e) => { e.currentTarget.src = placeholderImage; }}
                 className="w-full h-80 md:h-[420px] object-cover"
               />
               {product.ribbonText && (

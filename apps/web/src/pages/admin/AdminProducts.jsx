@@ -21,6 +21,7 @@ const AdminProducts = () => {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [bulkJson, setBulkJson] = useState('');
   const [bulkLoading, setBulkLoading] = useState(false);
+  const [uploadingImg, setUploadingImg] = useState(false);
 
   const token = localStorage.getItem('vape-shop-token');
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
@@ -85,6 +86,34 @@ const AdminProducts = () => {
   const addVariant = () => setForm(prev => ({ ...prev, variants: [...prev.variants, { title: '', price: 0, salePrice: 0, inventory: 0 }] }));
   const removeVariant = (i) => setForm(prev => ({ ...prev, variants: prev.variants.filter((_, idx) => idx !== i) }));
   const updateVariant = (i, key, val) => setForm(prev => ({ ...prev, variants: prev.variants.map((v, idx) => idx === i ? { ...v, [key]: val } : v) }));
+
+  const handleImageUpload = async (file) => {
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type)) {
+      toast({ title: 'Invalid file', description: 'Sirf image file (jpg, png, webp, gif) upload karo.', variant: 'destructive' });
+      return;
+    }
+    setUploadingImg(true);
+    setError('');
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      const res = await fetch(`${API_BASE}/api/uploads/image`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.message || 'Upload failed'); }
+      const data = await res.json();
+      setForm(prev => ({ ...prev, image: data.url }));
+      toast({ title: 'Image uploaded', description: 'Image MongoDB me save ho gayi. Save dabana na bhoolo.' });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploadingImg(false);
+    }
+  };
+
 
   const handleBulkImport = async () => {
     let data;
@@ -194,8 +223,23 @@ const AdminProducts = () => {
               className="h-10 px-3 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
             <input placeholder="Subtitle" value={form.subtitle} onChange={e => setForm({...form, subtitle: e.target.value})}
               className="h-10 px-3 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
-            <input placeholder="Image URL" value={form.image} onChange={e => setForm({...form, image: e.target.value})}
-              className="h-10 px-3 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
+            <div className="sm:col-span-2">
+              <label className="block text-xs text-gray-500 mb-1">Product Image</label>
+              <div className="flex items-center gap-3">
+                <input placeholder="Image URL" value={form.image.startsWith('data:') ? '(MongoDB me saved)' : form.image} onChange={e => setForm({...form, image: e.target.value})}
+                  className="h-10 px-3 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50 flex-1 min-w-0" />
+                <label className={`h-10 px-4 rounded-lg text-sm font-semibold cursor-pointer flex items-center gap-2 ${uploadingImg ? 'bg-white/10 text-gray-400' : 'bg-emerald-500 text-white hover:bg-emerald-600'} transition-colors`}>
+                  {uploadingImg ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+                  {uploadingImg ? 'Uploading...' : 'Upload File'}
+                  <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" disabled={uploadingImg}
+                    onChange={e => { handleImageUpload(e.target.files[0]); e.target.value = ''; }} />
+                </label>
+                {form.image && (
+                  <img src={form.image} alt="" className="w-10 h-10 rounded-lg object-cover bg-white/5 shrink-0" onError={e => { e.currentTarget.style.display = 'none'; }} />
+                )}
+              </div>
+              <p className="text-[11px] text-gray-500 mt-1">Upload karne par image MongoDB me permanently save hoti hai — kabhi delete nahi hogi.</p>
+            </div>
             <select value={form.category} onChange={e => setForm({...form, category: e.target.value})}
               className="h-10 px-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50">
               <option value="" className="text-gray-900 bg-white">Select Category</option>
@@ -240,7 +284,7 @@ const AdminProducts = () => {
         {products.map((p) => (
           <div key={p._id} className="bg-white/[0.03] border border-white/10 rounded-xl p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center overflow-hidden shrink-0">
-              {p.image ? <img src={p.image} alt="" loading="lazy" className="w-full h-full object-cover" /> : <span className="text-gray-600 text-xs">No img</span>}
+              {p.image ? <img src={p.image} alt="" loading="lazy" className="w-full h-full object-cover" onError={e => { e.currentTarget.style.display = 'none'; }} /> : <span className="text-gray-600 text-xs">No img</span>}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white font-medium text-sm truncate">{p.title}</p>

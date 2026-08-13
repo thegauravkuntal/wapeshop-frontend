@@ -131,6 +131,7 @@ const ShoppingCart = ({ isCartOpen, setIsCartOpen }) => {
                         src={item.product.image || 'https://via.placeholder.com/80'}
                         alt={item.product.title}
                         loading="lazy"
+                        onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/80'; }}
                         className="w-16 h-16 object-cover rounded-lg shrink-0"
                       />
                       <div className="flex-1 min-w-0">

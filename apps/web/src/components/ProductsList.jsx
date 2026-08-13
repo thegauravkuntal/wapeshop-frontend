@@ -87,6 +87,7 @@ const ProductCard = ({ product, index }) => {
               alt={product.title}
               loading="lazy"
               onLoad={() => setImgLoaded(true)}
+              onError={(e) => { e.currentTarget.src = placeholderImage; setImgLoaded(true); }}
               className={`w-full h-56 object-cover transition-all duration-500 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

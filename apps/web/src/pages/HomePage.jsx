@@ -39,6 +39,7 @@ const CatImg = ({ src, alt, className }) => {
         loading="eager"
         fetchPriority="high"
         onLoad={() => setLoaded(true)}
+        onError={(e) => { if (src !== catPlaceholder) e.currentTarget.src = catPlaceholder; setLoaded(true); }}
         className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
       />
     </>
