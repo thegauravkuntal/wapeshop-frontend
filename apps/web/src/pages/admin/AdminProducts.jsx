@@ -29,7 +29,7 @@ const AdminProducts = () => {
   const fetchData = async () => {
     try {
       const [pRes, cRes] = await Promise.all([
-        fetch(`${API_BASE}/api/products`, { headers }),
+        fetch(`${API_BASE}/api/products?limit=1000`, { headers }),
         fetch(`${API_BASE}/api/categories`, { headers }),
       ]);
       if (pRes.ok) { const d = await pRes.json(); setProducts(d.products || []); }

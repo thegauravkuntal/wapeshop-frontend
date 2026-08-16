@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Trash2, Eye, MessageSquare, Mail, Phone, Clock } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 const AdminLeads = () => {
-  const { token } = useAuth();
   const { toast } = useToast();
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
 
-  const headers = { Authorization: `Bearer ${token}` };
+  const token = localStorage.getItem('vape-shop-token');
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
 
   const fetchLeads = async () => {
     try {

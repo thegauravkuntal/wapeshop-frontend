@@ -122,32 +122,62 @@ const HomePage = () => {
       </section>
 
       {/* CATEGORIES */}
-      <section className="max-w-[90rem] mx-auto px-6 py-16">
-        <div className="text-center mb-12">
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold">Shop by <span className="neon-text">Category</span></h2>
-          <p className="text-gray-400 mt-3">Explore our wide range of premium vape categories</p>
-          <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5">
-          {(dbCategories.length > 0 ? dbCategories : (() => { const d = []; for (let i = 0; i < 5; i++) d.push({ _id: 'skeleton', title: '', image: '' }); return d; })()).map((c, i) => (
-            <motion.div key={c._id || i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.05 }}>
-              <Link
-                to={c._id && c._id !== 'skeleton' ? `/store?category=${c._id}` : '/store'}
-                className="group block rounded-2xl overflow-hidden glass-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_0_45px_-8px_rgba(56,189,248,0.6)]"
-              >
-                <div className="relative aspect-square overflow-hidden">
-                  <CatImg src={c.image || catPlaceholder} alt={c.title || c.name || ''} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="font-display font-bold text-sm sm:text-base leading-tight">{c.title || '...'}</h3>
-                    <p className="text-[11px] text-gray-300 mt-0.5">{(c.title || '').substring(0, 24)}</p>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      <section className="mx-auto max-w-[90rem] px-6 py-16">
+  {/* Heading */}
+  <div className="mb-12 text-center">
+    <h2 className="font-display text-3xl font-extrabold sm:text-4xl">
+      Shop by <span className="neon-text">Category</span>
+    </h2>
+
+    <p className="mt-3 text-gray-400">
+      Explore our wide range of premium categories
+    </p>
+
+    <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
+  </div>
+
+  {/* Categories */}
+  {dbCategories?.length > 0 ? (
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5">
+      {dbCategories.map((c, i) => (
+        <motion.div
+          key={c._id || i}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: i * 0.05 }}
+        >
+          <Link
+            to={`/store?category=${c._id}`}
+            className="glass-card group block overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_0_45px_-8px_rgba(56,189,248,0.6)]"
+          >
+            <div className="relative aspect-square overflow-hidden">
+              <CatImg
+                src={c.image || catPlaceholder}
+                alt={c.title || c.name || "Category"}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+              {/* Content */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <h3 className="font-display text-sm font-bold leading-tight sm:text-base">
+                  {c.title || c.name}
+                </h3>
+
+                <p className="mt-0.5 text-[11px] text-gray-300">
+                  {c.title || c.name}
+                </p>
+              </div>
+            </div>
+          </Link>
+        </motion.div>
+      ))}
+    </div>
+  ) : null}
+     </section>
 
       {/* WHY CHOOSE US */}
       <section className="max-w-[90rem] mx-auto px-6 py-16">
@@ -276,7 +306,7 @@ const HomePage = () => {
             View All Products <ArrowRight size={18} />
           </Link>
         </div>
-        <ProductsList />
+        <ProductsList limit={12} />
         <div className="mt-10 text-center sm:hidden">
           <Link to="/store" className="inline-flex items-center gap-2 text-emerald-400 font-semibold">View All Products <ArrowRight size={18} /></Link>
         </div>
