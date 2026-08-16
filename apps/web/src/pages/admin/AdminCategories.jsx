@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X, Save, Loader2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Save, Loader2, Upload } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 const AdminCategories = () => {
+  const { toast } = useToast();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ title: '', image: '', description: '', order: 0 });
   const [saving, setSaving] = useState(false);
+  const [uploadingImg, setUploadingImg] = useState(false);
   const [error, setError] = useState('');
 
   const token = localStorage.getItem('vape-shop-token');
@@ -24,13 +27,76 @@ const AdminCategories = () => {
 
   useEffect(() => { fetchData(); }, []);
 
+  const handleImageUpload = async (file) => {
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type)) {
+      toast({ title: 'Invalid file', description: 'Sirf image file (jpg, png, webp, gif) upload karo.', variant: 'destructive' });
+      return;
+    }
+    setUploadingImg(true);
+    setError('');
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      const res = await fetch(`${API_BASE}/api/uploads/image`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.message || 'Upload failed'); }
+      const data = await res.json();
+      setForm(prev => ({ ...prev, image: data.url }));
+      toast({ title: 'Image uploaded', description: 'Image MongoDB me save ho gayi. Save dabana na bhoolo.' });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploadingImg(false);
+    }
+  };
+
+  const convertUrlToMongo = async (url) => {
+    const res = await fetch(`${API_BASE}/api/uploads/from-url`, {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+    if (!res.ok) { const d = await res.json(); throw new Error(d.message || 'URL save failed'); }
+    const data = await res.json();
+    return data.url;
+  };
+
+  const handleImageUrlBlur = async () => {
+    const val = (form.image || '').trim();
+    if (!val) return;
+    if (val.startsWith(`${API_BASE}/api/images/`)) return;
+    if (!/^https?:\/\//i.test(val)) return;
+    setUploadingImg(true);
+    setError('');
+    try {
+      const permanent = await convertUrlToMongo(val);
+      setForm(prev => ({ ...prev, image: permanent }));
+      toast({ title: 'Image saved in MongoDB', description: 'Ye image ab MongoDB me permanent hai. Save dabana na bhoolo.' });
+    } catch (err) {
+      setError(err.message);
+      toast({ title: 'Image save failed', description: err.message, variant: 'destructive' });
+    } finally {
+      setUploadingImg(false);
+    }
+  };
+
   const handleSave = async () => {
     setSaving(true); setError('');
     try {
       const isNew = editing === 'new';
       const url = isNew ? `${API_BASE}/api/categories` : `${API_BASE}/api/categories/${editing}`;
       const method = isNew ? 'POST' : 'PUT';
-      const res = await fetch(url, { method, headers, body: JSON.stringify(form) });
+
+      let image = (form.image || '').trim();
+      if (image && !image.startsWith(`${API_BASE}/api/images/`) && /^https?:\/\//i.test(image)) {
+        image = await convertUrlToMongo(image);
+      }
+
+      const res = await fetch(url, { method, headers, body: JSON.stringify({ ...form, image }) });
       if (!res.ok) { const d = await res.json(); throw new Error(d.message); }
       setEditing(null); setForm({ title: '', image: '', description: '', order: 0 }); fetchData();
     } catch (err) { setError(err.message); }
@@ -70,8 +136,25 @@ const AdminCategories = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <input placeholder="Title *" value={form.title} onChange={e => setForm({...form, title: e.target.value})}
               className="h-10 px-3 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
-            <input placeholder="Image URL" value={form.image} onChange={e => setForm({...form, image: e.target.value})}
-              className="h-10 px-3 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
+            <div>
+              <div className="flex gap-2">
+                <input placeholder="Image URL (paste karo, apne aap MongoDB me save hoga)"
+                  value={form.image.startsWith('data:') ? '(MongoDB me saved)' : form.image} onChange={e => setForm({...form, image: e.target.value})} onBlur={handleImageUrlBlur}
+                  className="h-10 px-3 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50 flex-1 min-w-0" />
+                <label className={`h-10 px-4 rounded-lg text-sm font-semibold cursor-pointer flex items-center gap-2 shrink-0 ${uploadingImg ? 'bg-white/10 text-gray-400' : 'bg-emerald-500 text-white hover:bg-emerald-600'} transition-colors`}>
+                  {uploadingImg ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+                  {uploadingImg ? 'Uploading...' : 'Upload File'}
+                  <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" disabled={uploadingImg}
+                    onChange={e => { handleImageUpload(e.target.files[0]); e.target.value = ''; }} />
+                </label>
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                {form.image && (
+                  <img src={form.image} alt="" className="w-10 h-10 rounded-lg object-cover bg-white/5 shrink-0" onError={e => { e.currentTarget.style.display = 'none'; }} />
+                )}
+                <p className="text-[11px] text-gray-500">Upload File chuno ya URL paste karo - dono tarah image MongoDB me permanent save hoti hai.</p>
+              </div>
+            </div>
             <input placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})}
               className="h-10 px-3 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50" />
             <input type="number" placeholder="Sort Order" value={form.order} onChange={e => setForm({...form, order: Number(e.target.value)})}

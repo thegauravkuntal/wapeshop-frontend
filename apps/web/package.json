@@ -5,7 +5,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite --host :: --port 3000",
-		"build": "vite build && cp -r dist/* . && cp dist/.* . 2>/dev/null; rm -rf dist",
+		"build": "vite build && node build.mjs",
 		"start": "vite preview --host :: --port 3000",
 		"lint": "eslint . --quiet",
 		"lint:warn": "eslint ."
