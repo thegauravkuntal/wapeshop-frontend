@@ -8,6 +8,7 @@ const AdminSeo = () => {
   const { toast } = useToast();
   const [form, setForm] = useState(getSeoSettings());
   const [preview, setPreview] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setForm(getSeoSettings());
@@ -15,23 +16,42 @@ const AdminSeo = () => {
 
   const update = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
 
-  const handleSave = () => {
-    saveSeoSettings(form);
-    window.dispatchEvent(new Event('seo-updated'));
-    toast({ title: 'SEO settings saved!' });
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await saveSeoSettings(form);
+      window.dispatchEvent(new Event('seo-updated'));
+      toast({ title: 'SEO settings saved!' });
+    } catch (error) {
+      toast({
+        title: 'Save failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleReset = () => {
-    const defaults = resetSeoSettings();
-    setForm(defaults);
-    window.dispatchEvent(new Event('seo-updated'));
-    toast({ title: 'Reset to defaults' });
+  const handleReset = async () => {
+    try {
+      const defaults = await resetSeoSettings();
+      setForm(defaults);
+      window.dispatchEvent(new Event('seo-updated'));
+      toast({ title: 'Reset to defaults' });
+    } catch (error) {
+      toast({
+        title: 'Reset failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
   };
 
   const fields = [
-    { key: 'title', label: 'Site Title', placeholder: 'Vape Shop Mumbai Andheri...', type: 'text' },
+    { key: 'title', label: 'Site Title', placeholder: 'My Online Store — Quality Products', type: 'text' },
     { key: 'description', label: 'Meta Description', placeholder: 'Describe your website...', type: 'textarea' },
-    { key: 'keywords', label: 'Meta Keywords', placeholder: 'vape, mumbai, elfbar...', type: 'text' },
+    { key: 'keywords', label: 'Meta Keywords', placeholder: 'keyword1, keyword2, keyword3...', type: 'text' },
     { key: 'ogImage', label: 'OG Image URL (Facebook/Twitter preview)', placeholder: 'https://...', type: 'text' },
     { key: 'favicon', label: 'Favicon URL', placeholder: 'https://...', type: 'text' },
   ];
@@ -73,8 +93,8 @@ const AdminSeo = () => {
         ))}
 
         <div className="flex items-center gap-3 pt-2">
-          <button onClick={handleSave} className="h-10 px-6 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 font-semibold text-sm text-white hover:brightness-110 transition-all active:scale-[0.98] flex items-center gap-2">
-            <CheckCircle size={16} /> Save
+          <button onClick={handleSave} disabled={saving} className="h-10 px-6 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 font-semibold text-sm text-white hover:brightness-110 transition-all active:scale-[0.98] flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+            <CheckCircle size={16} /> {saving ? 'Saving...' : 'Save'}
           </button>
           <button onClick={handleReset} className="h-10 px-6 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all text-sm flex items-center gap-2">
             <RefreshCw size={14} /> Reset
@@ -100,7 +120,7 @@ const AdminSeo = () => {
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }} className="text-xs text-gray-500 bg-white/[0.02] border border-white/5 rounded-xl p-4">
         <p className="font-medium text-gray-400 mb-1">How it works:</p>
-        <p>Ye settings website ke har page ke &lt;head&gt; section me meta tags add karengi. Isliye Google & social media (Facebook, Twitter) ko sahi title, description aur image dikhegi. Changes save karte hi apply ho jayenge.</p>
+        <p>Ye settings database me save hoti hain aur website ke har page ke &lt;head&gt; section me meta tags add karti hain — sabhi visitors aur search engines (Google, Facebook, Twitter) ko sahi title, description aur image dikhegi. Save karte hi live ho jata hai.</p>
       </motion.div>
     </div>
   );

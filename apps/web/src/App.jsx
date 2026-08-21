@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
 import ScrollToTop from './components/ScrollToTop';
@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import { CartProvider } from './hooks/useCart';
 import { Toaster } from '@/components/ui/toaster';
+import { fetchSeoSettings } from './lib/seo';
 import HomePage from './pages/HomePage';
 import StorePage from './pages/StorePage';
 import AboutPage from './pages/AboutPage';
@@ -25,6 +26,10 @@ import AdminLeads from './pages/admin/AdminLeads';
 import AdminSeo from './pages/admin/AdminSeo';
 
 function App() {
+  useEffect(() => {
+    fetchSeoSettings();
+  }, []);
+
   return (
     <AuthProvider>
       <CartProvider>
