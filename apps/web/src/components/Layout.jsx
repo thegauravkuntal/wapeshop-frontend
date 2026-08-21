@@ -357,7 +357,7 @@ const Footer = () => (
       </div>
       <div>
         <h4 className="font-semibold mb-4 text-white">Get in touch</h4>
-        <p className="text-sm text-gray-400">Andheri West, Mumbai, Maharashtra</p>
+        <p className="text-sm text-gray-400">1st road, Prof. Almeda Pk Rd, Mumbai, Maharashtra 400050</p>
         <p className="text-sm text-gray-400 mt-2">Free delivery across Mumbai on orders above ₹999</p>
       </div>
     </div>
