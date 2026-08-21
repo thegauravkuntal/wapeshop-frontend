@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle, Minus, Plus, XCircle, ShoppingCart } from 'lucide-react';
@@ -97,9 +97,7 @@ function ProductDetailPage() {
 
   return (
     <>
-      <Helmet>
-        <title>{product.title} — Vape Shop Mumbai</title>
-      </Helmet>
+      <PageHelmet title={product.title} />
       <div className="max-w-5xl mx-auto">
         <Link to="/store" className="inline-flex items-center gap-2 text-white hover:text-emerald-400 transition-colors mb-6">
           <ArrowLeft size={16} /> Back to Store

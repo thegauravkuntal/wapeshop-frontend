@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { useAuth } from '@/context/AuthContext';
 import { updateProfile } from '@/api/authApi';
 import { UserCircle, Save, Loader2 } from 'lucide-react';
@@ -48,7 +48,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Helmet><title>My Profile — Vape Shop Mumbai</title></Helmet>
+      <PageHelmet title="My Profile" />
       <section className="max-w-2xl mx-auto px-6 py-20">
         <div className="flex items-center gap-4 mb-8">
           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white text-2xl font-bold">

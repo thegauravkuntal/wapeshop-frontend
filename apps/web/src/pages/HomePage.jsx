@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Truck, ShieldCheck, Star, Zap, RotateCcw, Heart, Award, Quote, Sparkles, Tag } from 'lucide-react';
@@ -60,10 +60,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Vape Shop Mumbai Andheri — Premium Vapes & E-Liquids</title>
-        <meta name="description" content="vapeshopbandramumbai24 — premium disposable vapes, pods, e-liquids and CBD vapes delivered across Mumbai." />
-      </Helmet>
+      <PageHelmet />
 
       {/* HERO */}
       <section className="relative overflow-hidden min-h-[92vh] flex items-center">

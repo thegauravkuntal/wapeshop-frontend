@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { ShieldCheck, Truck, Award, Heart } from 'lucide-react';
 
 const features = [
@@ -11,7 +11,7 @@ const features = [
 
 const AboutPage = () => (
   <>
-    <Helmet><title>About — Vape Shop Mumbai Andheri</title></Helmet>
+    <PageHelmet title="About" />
     <section className="max-w-4xl mx-auto px-6 py-20 text-center">
       <h1 className="font-display text-4xl sm:text-5xl font-extrabold">About <span className="neon-text">Vape Shop</span></h1>
       <p className="mt-6 text-lg text-gray-300">

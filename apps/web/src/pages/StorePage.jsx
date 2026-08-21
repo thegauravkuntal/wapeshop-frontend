@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ProductsList from '@/components/ProductsList';
@@ -28,7 +28,7 @@ const StorePage = () => {
 
   return (
     <>
-      <Helmet><title>All Products — Vape Shop Mumbai Andheri</title></Helmet>
+      <PageHelmet title="All Products" />
       <section className="max-w-[90rem] mx-auto px-6 py-14">
         <div className="text-center mb-12">
           <h1 className="font-display text-4xl sm:text-5xl font-extrabold">Our <span className="neon-text">Products</span></h1>

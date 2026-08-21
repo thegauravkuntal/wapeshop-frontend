@@ -76,7 +76,7 @@ const Header = ({ onCartClick, onAuthOpen }) => {
       <header className="sticky top-0 z-40 bg-black/80 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-[90rem] mx-auto px-4 sm:px-6 flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 shrink-0">
-            <img src={LOGO} alt="Vape Shop Mumbai Andheri logo" fetchPriority="high" className="h-12 w-12 rounded-lg object-cover ring-1 ring-white/15" />
+            <img src={LOGO} alt="Store logo" fetchPriority="high" className="h-12 w-12 rounded-lg object-cover ring-1 ring-white/15" />
             <span className="leading-tight">
               <span className="block font-display font-extrabold text-lg tracking-wide">VAPE SHOP</span>
               <span className="block text-[10px] font-semibold tracking-[0.25em] text-emerald-400">MUMBAI ANDHERI</span>

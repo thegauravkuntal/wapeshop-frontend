@@ -1,11 +1,11 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { Link } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 
 const SuccessPage = () => (
   <>
-    <Helmet><title>Order Confirmed — Vape Shop Mumbai Andheri</title></Helmet>
+    <PageHelmet title="Order Confirmed" />
     <section className="max-w-xl mx-auto px-6 py-32 text-center">
       <CheckCircle className="mx-auto text-emerald-400 mb-6" size={72} />
       <h1 className="font-display text-4xl font-extrabold">Thank you!</h1>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { Link } from 'react-router-dom';
 import { Package, Clock, CheckCircle, Truck, XCircle } from 'lucide-react';
 
@@ -40,7 +40,7 @@ const OrdersPage = () => {
   if (loading) {
     return (
       <>
-        <Helmet><title>My Orders — Vape Shop Mumbai</title></Helmet>
+        <PageHelmet title="My Orders" />
         <section className="max-w-4xl mx-auto px-6 py-20">
           <div className="flex justify-center py-20">
             <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
@@ -52,7 +52,7 @@ const OrdersPage = () => {
 
   return (
     <>
-      <Helmet><title>My Orders — Vape Shop Mumbai</title></Helmet>
+      <PageHelmet title="My Orders" />
       <section className="max-w-4xl mx-auto px-6 py-20">
         <h1 className="font-display text-3xl font-extrabold text-white mb-8 flex items-center gap-3">
           <Package size={28} /> My Orders

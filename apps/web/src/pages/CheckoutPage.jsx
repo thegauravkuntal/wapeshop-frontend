@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, MapPin, User, Phone, Package, Trash2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -163,9 +163,7 @@ const CheckoutPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Checkout — Vape Shop Mumbai</title>
-      </Helmet>
+      <PageHelmet title="Checkout" />
       <div className="max-w-4xl mx-auto">
         <Link to={backLink} className="inline-flex items-center gap-2 text-white hover:text-emerald-400 transition-colors mb-6">
           <ArrowLeft size={16} /> Back

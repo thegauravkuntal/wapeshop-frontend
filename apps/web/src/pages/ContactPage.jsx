@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
+import PageHelmet from '@/components/PageHelmet';
 import { MapPin, Phone, Mail, Send, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -36,7 +36,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <Helmet><title>Contact — Vape Shop Mumbai Andheri</title></Helmet>
+      <PageHelmet title="Contact" />
       <section className="max-w-[75rem] mx-auto px-6 py-20 grid gap-12 lg:grid-cols-2">
         <div>
           <h1 className="font-display text-4xl sm:text-5xl font-extrabold">Get in <span className="neon-text">Touch</span></h1>
