@@ -353,11 +353,13 @@ const Footer = () => (
           <li><Link to="/about" className="hover:text-emerald-400">About Us</Link></li>
           <li><Link to="/contact" className="hover:text-emerald-400">Contact</Link></li>
           <li><Link to="/store" className="hover:text-emerald-400">All Products</Link></li>
+          <li><Link to="/blog" className="hover:text-emerald-400">Blog</Link></li>
         </ul>
       </div>
       <div>
         <h4 className="font-semibold mb-4 text-white">Get in touch</h4>
         <p className="text-sm text-gray-400">1st road, Prof. Almeda Pk Rd, Mumbai, Maharashtra 400050</p>
+        <p className="text-sm text-gray-400 mt-2">Call / WhatsApp: +91 9982304362</p>
         <p className="text-sm text-gray-400 mt-2">Free delivery across Mumbai on orders above ₹999</p>
       </div>
     </div>
@@ -577,15 +579,37 @@ const Layout = ({ children }) => {
         <title>{seo.title}</title>
         <meta name="description" content={seo.description} />
         <meta name="keywords" content={seo.keywords} />
-        <meta property="og:title" content={seo.title} />
-        <meta property="og:description" content={seo.description} />
+        <meta property="og:title" content={seo.ogTitle || seo.title} />
+        <meta property="og:description" content={seo.ogDescription || seo.description} />
         <meta property="og:image" content={seo.ogImage} />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={seo.title} />
-        <meta name="twitter:description" content={seo.description} />
+        <meta name="twitter:title" content={seo.twitterTitle || seo.title} />
+        <meta name="twitter:description" content={seo.twitterDescription || seo.description} />
         <meta name="twitter:image" content={seo.ogImage} />
         <link rel="icon" href={seo.favicon} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'OnlineStore',
+            name: 'Vape Shop Mumbai Bandra',
+            description: 'Vape Shop Mumbai Bandra is an online vape store offering disposable vapes, pod systems, e-liquids and vape accessories with same day delivery across Mumbai, Bandra and Andheri.',
+            url: 'https://vapeshopbandramumbai24.com/',
+            image: seo.ogImage,
+            telephone: '+919982304362',
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: '1st road, Prof. Almeda Pk Rd',
+              addressLocality: 'Mumbai',
+              addressRegion: 'Maharashtra',
+              postalCode: '400050',
+              addressCountry: 'IN',
+            },
+            areaServed: ['Mumbai', 'Bandra', 'Andheri'],
+            openingHours: 'Mo-Su 10:00-22:00',
+            priceRange: '₹₹',
+          })}
+        </script>
       </Helmet>
       <Header
         onCartClick={() => setIsCartOpen(true)}

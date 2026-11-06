@@ -11,9 +11,9 @@ const features = [
 
 const AboutPage = () => (
   <>
-    <PageHelmet title="About" />
+    <PageHelmet rawTitle="Vape Shop - Best Vapouriser Dealers in Mumbai | Vape Shop Mumbai Andheri Near Me Open Now" />
     <section className="max-w-4xl mx-auto px-6 py-20 text-center">
-      <h1 className="font-display text-4xl sm:text-5xl font-extrabold">About <span className="neon-text">Vape Shop</span></h1>
+      <h1 className="font-display text-4xl sm:text-5xl font-extrabold">About <span className="neon-text">Vape Shop Mumbai</span></h1>
       <p className="mt-6 text-lg text-gray-300">
         vapeshopbandramumbai24 is Andheri's premium destination for disposable vapes, pod systems, e-liquids,
         vape kits, accessories and CBD vapes. We bring authentic products, bold flavors and colorful clouds to

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageHelmet from '@/components/PageHelmet';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Truck, ShieldCheck, Star, Zap, RotateCcw, Heart, Award, Quote, Sparkles, Tag } from 'lucide-react';
@@ -70,11 +71,11 @@ const HomePage = () => {
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-emerald-400 mb-6">
               <Star size={13} className="fill-emerald-400" /> Andheri's #1 Vape Store
             </span>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05]">
-              Elevate Your <br /> <span className="neon-text">Vape Experience</span>
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.05]">
+              Vape Shop Mumbai Bandra – <br /> <span className="neon-text">Buy Authentic Vapes Online</span>
             </h1>
             <p className="mt-6 text-lg text-gray-300 max-w-md">
-              Explore a premium range of disposable vapes, pod systems, e-liquids and more — with colorful clouds and unbeatable flavor.
+              Shop authentic disposable vapes, pod systems, e-liquids and accessories online — with same day vape delivery in Bandra, Andheri &amp; across Mumbai.
             </p>
             <div className="mt-9 flex flex-wrap gap-4">
               <Link to="/store" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 via-fuchsia-500 to-purple-600 px-7 py-3.5 font-semibold text-white shadow-lg shadow-fuchsia-500/30 hover:brightness-110 transition-all active:scale-[0.98]">
@@ -94,12 +95,12 @@ const HomePage = () => {
             <div className="absolute inset-0 blur-3xl bg-gradient-to-tr from-sky-500/20 via-fuchsia-500/20 to-purple-600/20 rounded-full" />
             <div className="relative w-[300px] h-[400px] animate-carousel" style={{ transformStyle: 'preserve-3d' }}>
               {[
-                { img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png' },
-                { img: 'https://images.hostinger.com/5eab9da6-8d68-46ca-b65c-9724b3c26193.png' },
-                { img: 'https://images.hostinger.com/96db0cdd-77a1-4403-ac60-0cf1cff497ad.png' },
-                { img: 'https://images.hostinger.com/019cf443-90fa-4626-94fa-78805cafdf52.png' },
-                { img: 'https://images.hostinger.com/548e8e8b-a0ba-4c1b-8755-b64130e4d70e.png' },
-                { img: 'https://images.hostinger.com/14c3995f-cde9-49e0-b1a0-fc7e5d366db8.png' },
+                { img: 'https://images.hostinger.com/d27fd603-ff66-40e3-9da8-38e6b8e4ae48.png', alt: 'Vape Shop Mumbai Bandra' },
+                { img: 'https://images.hostinger.com/5eab9da6-8d68-46ca-b65c-9724b3c26193.png', alt: 'Disposable Vape Mumbai' },
+                { img: 'https://images.hostinger.com/96db0cdd-77a1-4403-ac60-0cf1cff497ad.png', alt: 'Buy Vape Online Mumbai' },
+                { img: 'https://images.hostinger.com/019cf443-90fa-4626-94fa-78805cafdf52.png', alt: 'Premium Vape Store Mumbai' },
+                { img: 'https://images.hostinger.com/548e8e8b-a0ba-4c1b-8755-b64130e4d70e.png', alt: 'Vape Delivery Bandra' },
+                { img: 'https://images.hostinger.com/14c3995f-cde9-49e0-b1a0-fc7e5d366db8.png', alt: 'Authentic Vape Products Mumbai' },
               ].map((item, i) => (
                 <div
                   key={i}
@@ -109,7 +110,7 @@ const HomePage = () => {
                     backfaceVisibility: 'hidden',
                   }}
                 >
-                  <HeroImg src={item.img} alt="Vape product" className="w-full h-full object-cover" />
+                  <HeroImg src={item.img} alt={item.alt} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 </div>
               ))}
@@ -123,11 +124,11 @@ const HomePage = () => {
   {/* Heading */}
   <div className="mb-12 text-center">
     <h2 className="font-display text-3xl font-extrabold sm:text-4xl">
-      Shop by <span className="neon-text">Category</span>
+      Buy Vape Online in <span className="neon-text">Mumbai</span>
     </h2>
 
     <p className="mt-3 text-gray-400">
-      Explore our wide range of premium categories
+      Explore our wide range of premium vape categories — same day delivery in Bandra &amp; Andheri
     </p>
 
     <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
@@ -179,7 +180,7 @@ const HomePage = () => {
       {/* WHY CHOOSE US */}
       <section className="max-w-[90rem] mx-auto px-6 py-16">
         <div className="text-center mb-12">
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold">Why <span className="neon-text">Choose Us</span></h2>
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold">Why <span className="neon-text">Choose Vape Shop Mumbai</span></h2>
           <p className="text-gray-400 mt-3">We don't just sell vapes — we deliver an experience</p>
           <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
         </div>
@@ -207,10 +208,10 @@ const HomePage = () => {
         <div className="relative max-w-[90rem] mx-auto px-6">
           <div className="text-center mb-12">
             <span className="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-fuchsia-300 mb-4">
-              <Tag size={13} /> Limited Time Offers
+              <Tag size={13} /> Combo Deals — Save big when you bundle up
             </span>
-            <h2 className="font-display text-3xl sm:text-4xl font-extrabold">Combo <span className="neon-text">Deals</span></h2>
-            <p className="text-gray-400 mt-3">Save big when you bundle up — exclusive combo packs</p>
+            <h2 className="font-display text-3xl sm:text-4xl font-extrabold">Same Day Vape Delivery in <span className="neon-text">Bandra &amp; Andheri</span></h2>
+            <p className="text-gray-400 mt-3">Order before 6 PM and get it delivered the same day across Mumbai</p>
             <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-600" />
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -221,7 +222,7 @@ const HomePage = () => {
             ].map((combo, i) => (
               <motion.div key={combo.name} initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.1 }} className={`glass-card rounded-2xl overflow-hidden group hover:-translate-y-1.5 transition-all duration-300 shadow-lg ${combo.glow}`}>
                 <div className="relative h-52 overflow-hidden">
-                  <CatImg src={combo.img} alt={combo.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <CatImg src={combo.img} alt="Premium Vape Store Mumbai" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
                   <span className="absolute top-4 left-4 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-600 px-3 py-1 text-[11px] font-bold text-white">{combo.tag}</span>
                   <div className="absolute bottom-4 left-4">
@@ -242,6 +243,36 @@ const HomePage = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* VAPE CATEGORIES SEO */}
+      <section className="max-w-[90rem] mx-auto px-6 py-10">
+        <div className="grid lg:grid-cols-2 gap-8">
+          <div className="glass-card rounded-2xl p-8">
+            <h2 className="font-display text-2xl sm:text-3xl font-extrabold">Disposable Vapes Available in <span className="neon-text">Mumbai</span></h2>
+            <p className="text-gray-400 mt-4 text-sm leading-relaxed">
+              Looking for a <strong className="text-gray-200">disposable vape in Mumbai</strong>? Browse the best-selling puff bars — ELFBAR, Yuoto, I GET and Geek Vapes — available for online ordering with same day delivery in Bandra West, Andheri and all Mumbai. If you searched <em>vape near me</em>, Vape Shop Mumbai has you covered.
+            </p>
+          </div>
+          <div className="glass-card rounded-2xl p-8">
+            <h2 className="font-display text-2xl sm:text-3xl font-extrabold">Premium Pod Systems &amp; <span className="neon-text">Vape Devices</span></h2>
+            <p className="text-gray-400 mt-4 text-sm leading-relaxed">
+              Buy premium pod systems, mods and refillable vape devices online in Mumbai — including authentic <strong className="text-gray-200">Vaporesso</strong> and Geek Vape kits. Higher puff counts, adjustable airflow and unbeatable flavor, delivered to your doorstep.
+            </p>
+          </div>
+        </div>
+
+        <div className="text-center mt-14 mb-8">
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold">Top Vape <span className="neon-text">Brands Available</span></h2>
+          <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
+        </div>
+        <div className="flex flex-wrap justify-center gap-3">
+          {['ELFBAR', 'Vaporesso', 'GEEK VAPE', 'YUOTO', 'I GET', 'AL FAKHER', 'TEREA & HEETS', 'PEN VAPES'].map((b) => (
+            <span key={b} className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-gray-200 hover:text-emerald-400 hover:border-emerald-400/40 transition-colors cursor-default">
+              {b}
+            </span>
+          ))}
         </div>
       </section>
 
@@ -340,6 +371,50 @@ const HomePage = () => {
                 </div>
               </div>
             </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="max-w-[75rem] mx-auto px-6 py-16">
+        <Helmet>
+          <script type="application/ld+json">
+            {JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: [
+                { q: 'Which is the best vape shop in Mumbai?', a: 'Vape Shop Mumbai Bandra is one of Mumbai\'s most trusted online vape stores, delivering 100% authentic disposable vapes, pod systems and e-liquids across Bandra, Andheri and all of Mumbai.' },
+                { q: 'Do you offer same day vape delivery in Bandra and Andheri?', a: 'Yes! Order before 6 PM and get same day delivery in Bandra West, Andheri and across Mumbai. Orders above ₹999 get free delivery.' },
+                { q: 'Can I buy disposable vapes online in Mumbai?', a: 'Absolutely. You can order ELFBAR, Yuoto, I GET, Geek Vapes and more popular disposable vape brands online with secure payment and fast Mumbai delivery.' },
+                { q: 'Which vape brands are available at Vape Shop Mumbai Bandra?', a: 'We stock premium authentic brands like ELFBAR, Vaporesso, Geek Vape, Yuoto, I GET, Al Fakher and Terea & Heets — all sourced directly from verified distributors.' },
+                { q: 'How do I contact Vape Shop Mumbai?', a: 'Call or WhatsApp us at +91 9982304362, or use the contact page. Our team is available 7 days a week, 10 AM to 10 PM.' },
+              ].map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+            })}
+          </script>
+        </Helmet>
+        <div className="text-center mb-12">
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold">Frequently Asked <span className="neon-text">Questions</span></h2>
+          <p className="text-gray-400 mt-3">Everything you need to know about ordering vapes online in Mumbai</p>
+          <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400" />
+        </div>
+        <div className="space-y-4">
+          {[
+            { q: 'Which is the best vape shop in Mumbai?', a: 'Vape Shop Mumbai Bandra is one of Mumbai\'s most trusted online vape stores, delivering 100% authentic disposable vapes, pod systems and e-liquids across Bandra, Andheri and all of Mumbai.' },
+            { q: 'Do you offer same day vape delivery in Bandra and Andheri?', a: 'Yes! Order before 6 PM and get same day delivery in Bandra West, Andheri and across Mumbai. Orders above ₹999 get free delivery.' },
+            { q: 'Can I buy disposable vapes online in Mumbai?', a: 'Absolutely. You can order ELFBAR, Yuoto, I GET, Geek Vapes and more popular disposable vape brands online with secure payment and fast Mumbai delivery.' },
+            { q: 'Which vape brands are available at Vape Shop Mumbai Bandra?', a: 'We stock premium authentic brands like ELFBAR, Vaporesso, Geek Vape, Yuoto, I GET, Al Fakher and Terea & Heets — all sourced directly from verified distributors.' },
+            { q: 'How do I contact Vape Shop Mumbai?', a: 'Call or WhatsApp us at +91 9982304362, or use the contact page. Our team is available 7 days a week, 10 AM to 10 PM.' },
+          ].map((f, i) => (
+            <details
+              key={i}
+              className="glass-card rounded-2xl p-6 group open:ring-1 open:ring-emerald-400/40 transition-all"
+            >
+              <summary className="flex items-center justify-between cursor-pointer font-semibold text-gray-100 text-sm sm:text-base list-none">
+                {f.q}
+                <span className="text-emerald-400 text-xl shrink-0 ml-4">+</span>
+              </summary>
+              <p className="text-sm text-gray-400 leading-relaxed mt-4">{f.a}</p>
+            </details>
           ))}
         </div>
       </section>

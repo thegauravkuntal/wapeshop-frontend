@@ -129,7 +129,7 @@ const CheckoutPage = () => {
 
       localStorage.removeItem('checkout-items');
       localStorage.removeItem('checkout-item');
-      openWhatsAppOrder('919983457020', {
+      openWhatsAppOrder('919982304362', {
         name: form.name,
         phone: form.phone,
         address: `${form.street}, ${form.city}, ${form.state} - ${form.pincode}`,

@@ -5,9 +5,13 @@ const LEGACY_STORAGE_KEY = 'vape-shop-seo';
 const LOGO_URL = 'https://horizons-cdn.hostinger.com/e2f1ece2-d7c0-4f82-9306-ebd3eb0d039c/94114334774e476ae574972944e6913d.jpg';
 
 export const DEFAULT_SEO = {
-  title: 'Horizons Export — Online Store',
-  description: 'Shop quality products online with fast delivery and secure payments.',
-  keywords: '',
+  title: 'Vape Shop - Best Vapouriser Dealers in Mumbai | Vape Shop Mumbai Andheri Near Me Open Now',
+  description: 'Buy authentic disposable vapes, pod systems, e-liquids and vape accessories online in Mumbai. Same day delivery in Bandra, Andheri & Mumbai.',
+  keywords: 'vape shop mumbai, vape shop bandra, buy vape online mumbai, disposable vape mumbai, vape delivery mumbai, vape near me, vape store mumbai, vape bandra west, elf bar mumbai, vaporesso mumbai',
+  ogTitle: 'Vape Shop Mumbai Bandra | Premium Vapes & Same Day Delivery',
+  ogDescription: 'Order authentic disposable vapes, pod systems and vape accessories online. Fast delivery across Mumbai.',
+  twitterTitle: 'Buy Vape Online Mumbai | Vape Shop Mumbai Bandra',
+  twitterDescription: 'Premium vaping products with same day delivery in Mumbai. Authentic brands and secure payments.',
   ogImage: LOGO_URL,
   favicon: LOGO_URL,
 };
@@ -34,6 +38,7 @@ const writeCache = (settings) => {
 export const getSeoSettings = () => ({
   ...DEFAULT_SEO,
   ...readCache(),
+  title: DEFAULT_SEO.title,
 });
 
 export async function fetchSeoSettings() {
@@ -47,6 +52,7 @@ export async function fetchSeoSettings() {
         settings[field] = data[field];
       }
     });
+    settings.title = DEFAULT_SEO.title;
     writeCache(settings);
     window.dispatchEvent(new Event('seo-updated'));
     return settings;

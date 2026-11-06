@@ -3,6 +3,11 @@ AddType text/css .css
 
 RewriteEngine On
 RewriteBase /
+
+# SEO files -> dynamic backend (Render)
+RewriteRule ^sitemap\.xml$ https://vapeshop-backend.onrender.com/sitemap.xml [R=301,L]
+RewriteRule ^robots\.txt$ https://vapeshop-backend.onrender.com/robots.txt [R=301,L]
+
 RewriteRule ^index\.html$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

@@ -11,6 +11,7 @@ import HomePage from './pages/HomePage';
 import StorePage from './pages/StorePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import BlogPage from './pages/BlogPage';
 import SuccessPage from './pages/SuccessPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ProductDetailPage from './pages/ProductDetailPage';
@@ -38,6 +39,14 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout><HomePage /></Layout>} />
             <Route path="/store" element={<Layout><StorePage /></Layout>} />
+            {/* SEO slug routes */}
+            <Route path="/shop-all-vapes" element={<Layout><StorePage /></Layout>} />
+            <Route path="/disposable-vapes-mumbai" element={<Layout><StorePage /></Layout>} />
+            <Route path="/pod-systems-mumbai" element={<Layout><StorePage /></Layout>} />
+            <Route path="/vape-accessories-mumbai" element={<Layout><StorePage /></Layout>} />
+            <Route path="/buy-vape-online-mumbai" element={<Layout><StorePage /></Layout>} />
+            <Route path="/contact-vape-shop-mumbai" element={<Layout><ContactPage /></Layout>} />
+            <Route path="/blog" element={<Layout><BlogPage /></Layout>} />
             <Route path="/product/:id" element={<Layout><ProductDetailPage /></Layout>} />
             <Route path="/about" element={<Layout><AboutPage /></Layout>} />
             <Route path="/contact" element={<Layout><ContactPage /></Layout>} />

@@ -36,14 +36,14 @@ const ContactPage = () => {
 
   return (
     <>
-      <PageHelmet title="Contact" />
+      <PageHelmet rawTitle="Contact Vape Shop Mumbai | Call +91 9982304362" />
       <section className="max-w-[75rem] mx-auto px-6 py-20 grid gap-12 lg:grid-cols-2">
         <div>
-          <h1 className="font-display text-4xl sm:text-5xl font-extrabold">Get in <span className="neon-text">Touch</span></h1>
+          <h1 className="font-display text-4xl sm:text-5xl font-extrabold">Contact <span className="neon-text">Vape Shop Mumbai</span></h1>
           <p className="mt-5 text-gray-300">Questions about a product or your order? Reach out — we're here to help.</p>
           <div className="mt-10 space-y-6">
             <div className="flex items-center gap-4"><MapPin className="text-emerald-400" /><span className="text-gray-300">1st road, Prof. Almeda Pk Rd, Mumbai, Maharashtra 400050</span></div>
-            <div className="flex items-center gap-4"><Phone className="text-emerald-400" /><span className="text-gray-300">+91 9306361736</span></div>
+            <div className="flex items-center gap-4"><Phone className="text-emerald-400" /><span className="text-gray-300">+91 9982304362</span></div>
             <div className="flex items-center gap-4"><Mail className="text-emerald-400" /><span className="text-gray-300">hello@vapeshopmumbai.in</span></div>
           </div>
         </div>
