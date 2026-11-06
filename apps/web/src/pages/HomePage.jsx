@@ -71,8 +71,8 @@ const HomePage = () => {
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-emerald-400 mb-6">
               <Star size={13} className="fill-emerald-400" /> Andheri's #1 Vape Store
             </span>
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.05]">
-              Vape Shop Mumbai Bandra – <br /> <span className="neon-text">Buy Authentic Vapes Online</span>
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.1]">
+              Vape Shop - Best Vapouriser <br /> <span className="neon-text">Dealers in Mumbai</span> | Vape Shop Mumbai Andheri
             </h1>
             <p className="mt-6 text-lg text-gray-300 max-w-md">
               Shop authentic disposable vapes, pod systems, e-liquids and accessories online — with same day vape delivery in Bandra, Andheri &amp; across Mumbai.
